@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>My Orders</h2>
+<div id="o"></div>
+
+<script>
+let orders=JSON.parse(localStorage.getItem("orders"))||[];
+orders.forEach((ord,i)=>{
+  o.innerHTML+=`<h3>Order ${i+1}</h3>`;
+  ord.forEach(p=>{
+    o.innerHTML+=`${p.name} x ${p.qty}<br>`;
+  });
+});
+</script>
+
+</body>
+</html>

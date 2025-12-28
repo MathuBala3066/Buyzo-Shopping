@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head><title>Checkout</title></head>
+<body>
+
+<h2>Checkout</h2>
+<input placeholder="Name"><br><br>
+<input placeholder="Address"><br><br>
+<input placeholder="Phone"><br><br>
+
+<button onclick="place()">Place Order</button>
+
+<script>
+function place(){
+  let orders=JSON.parse(localStorage.getItem("orders"))||[];
+  orders.push(JSON.parse(localStorage.getItem("cart")));
+  localStorage.setItem("orders",JSON.stringify(orders));
+  localStorage.removeItem("cart");
+  location.href="success.html";
+}
+</script>
+
+</body>
+</html>

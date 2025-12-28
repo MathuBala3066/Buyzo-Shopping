@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Details</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Product Details</h2>
+<div id="details"></div>
+
+<script>
+let p=JSON.parse(localStorage.getItem("selectedProduct"));
+let qty=1;
+
+details.innerHTML=`
+<div class="img-zoom">
+<img src="images/${p.image}">
+</div>
+<h3>${p.name}</h3>
+<p>₹${p.price}</p>
+<p>${"⭐".repeat(p.rating)}</p>
+
+<button onclick="chg(-1)">-</button>
+<span id="q">${qty}</span>
+<button onclick="chg(1)">+</button><br><br>
+
+<button onclick="add()">Add To Cart</button>
+`;
+
+function chg(v){
+  qty+=v; if(qty<1)qty=1;
+  q.innerText=qty;
+}
+
+function add(){
+  let cart=JSON.parse(localStorage.getItem("cart"))||[];
+  let f=cart.find(i=>i.id===p.id);
+  if(f)f.qty+=qty;
+  else cart.push({...p,qty});
+  localStorage.setItem("cart",JSON.stringify(cart));
+  alert("Added to cart");
+}
+</script>
+
+</body>
+</html>
