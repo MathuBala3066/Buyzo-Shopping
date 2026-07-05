@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buyzo Shopping — Glow Bazaar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff2f87;
+    --pink-deep:#d6006f;
+    --pink-soft:#ffd6e8;
+    --blush:#fff0f6;
+    --gold:#ffc93c;
+    --plum:#3a0d24;
+    --mauve:#a5677e;
+    --white:#fffbfd;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Poppins', sans-serif;
+    background:linear-gradient(180deg, var(--blush), #ffe3ef 40%, var(--blush));
+    color:var(--plum);
+    overflow-x:hidden;
+  }
+  a{text-decoration:none; color:inherit;}
+  ::selection{background:var(--pink); color:#fff;}
+  h1,h2,h3{font-family:'Baloo 2', sans-serif;}
+
+  /* floating sparkles */
+  .sparkle-field{position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none;}
+  .sparkle{
+    position:absolute; bottom:-40px; font-size:1.4rem; opacity:0.7;
+    animation:rise linear infinite;
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) rotate(0deg); opacity:0;}
+    10%{opacity:0.8;}
+    90%{opacity:0.6;}
+    100%{transform:translateY(-110vh) rotate(360deg); opacity:0;}
+  }
+
+  /* ---- ticker ---- */
+  .ticker{
+    background:var(--pink); color:#fff; font-weight:600; font-size:0.78rem;
+    padding:8px 0; white-space:nowrap; overflow:hidden;
+  }
+  .ticker span{display:inline-block; padding-left:100%; animation:tick 24s linear infinite;}
+  @keyframes tick{0%{transform:translateX(0);}100%{transform:translateX(-100%);}}
+
+  /* ---- header ---- */
+  header{
+    position:sticky; top:0; z-index:60;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 5%;
+    background:rgba(255,251,253,0.85); backdrop-filter:blur(10px);
+    border-bottom:2px solid var(--pink-soft);
+  }
+  .logo{display:flex; align-items:center; gap:10px; font-family:'Baloo 2'; font-weight:800; font-size:1.5rem; color:var(--pink-deep);}
+  .logo .mark{
+    width:38px; height:38px; border-radius:50%;
+    background:linear-gradient(135deg, var(--pink), var(--gold));
+    display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:#fff;
+    box-shadow:0 4px 14px rgba(255,47,135,0.4);
+  }
+  .logo .sub{display:block; font-family:'Poppins'; font-size:0.6rem; font-weight:600; color:var(--mauve); letter-spacing:0.1em; margin-top:-2px;}
+  nav{display:flex; gap:30px; font-weight:600; font-size:0.92rem;}
+  nav a{color:var(--mauve); position:relative;}
+  nav a:hover{color:var(--pink-deep);}
+  .nav-actions{display:flex; gap:14px; align-items:center;}
+  .icon-btn{
+    background:var(--white); border:2px solid var(--pink-soft); color:var(--pink-deep);
+    width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:1rem;
+    display:flex; align-items:center; justify-content:center; position:relative; transition:.2s;
+  }
+  .icon-btn:hover{border-color:var(--pink); background:var(--pink-soft);}
+  .cart-count{
+    position:absolute; top:-4px; right:-4px; background:var(--gold); color:var(--plum);
+    font-size:0.62rem; font-weight:700; width:18px; height:18px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* ---- hero ---- */
+  .hero{
+    padding:70px 5% 50px; max-width:1300px; margin:0 auto;
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--pink-soft); color:var(--pink-deep); font-weight:600; font-size:0.78rem;
+    padding:8px 16px; border-radius:999px; margin-bottom:20px;
+  }
+  h1.hero-title{
+    font-weight:800; font-size:clamp(2.2rem, 5vw, 3.6rem); line-height:1.15; margin-bottom:18px;
+  }
+  h1.hero-title .grad{
+    background:linear-gradient(90deg, var(--pink), var(--pink-deep) 50%, var(--gold));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p.desc{color:var(--mauve); font-size:1.02rem; max-width:460px; line-height:1.7; margin-bottom:30px;}
+  .btn-row{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    font-family:'Baloo 2'; font-weight:700; font-size:0.98rem; letter-spacing:0.01em;
+    padding:15px 32px; border-radius:999px; cursor:pointer; border:none;
+    position:relative; overflow:hidden; transition:transform .15s, box-shadow .2s;
+  }
+  .btn:hover{transform:translateY(-2px) scale(1.02);}
+  .btn-primary{
+    background:linear-gradient(135deg, var(--pink), var(--pink-deep));
+    color:#fff; box-shadow:0 8px 24px rgba(255,47,135,0.4);
+  }
+  .btn-primary::after{
+    content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+    transform:skewX(-20deg);
+    transition:left .5s;
+  }
+  .btn-primary:hover::after{left:130%;}
+  .btn-ghost{background:var(--white); color:var(--pink-deep); border:2px solid var(--pink-soft);}
+  .btn-ghost:hover{border-color:var(--pink);}
+
+  .hero-visual{
+    position:relative; aspect-ratio:1/1; border-radius:32px;
+    background:linear-gradient(160deg, var(--pink-soft), #ffe9f2);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    box-shadow:0 20px 50px rgba(255,47,135,0.25);
+  }
+  .hero-visual .blob{
+    position:absolute; width:70%; aspect-ratio:1/1; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff 0%, var(--pink) 55%, var(--pink-deep) 100%);
+    filter:blur(1px);
+    animation:float 5s ease-in-out infinite;
+    box-shadow:0 0 60px rgba(255,47,135,0.5);
+  }
+  @keyframes float{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-16px) scale(1.03);}}
+  .hero-visual .emoji-big{position:relative; z-index:2; font-size:5rem; filter:drop-shadow(0 6px 14px rgba(0,0,0,0.15));}
+  .hero-badge{
+    position:absolute; top:20px; right:20px; background:var(--gold); color:var(--plum);
+    font-family:'Baloo 2'; font-weight:700; font-size:0.75rem; padding:8px 16px; border-radius:999px;
+    box-shadow:0 6px 16px rgba(255,201,60,0.5); z-index:3;
+    animation:wiggle 2.4s ease-in-out infinite;
+  }
+  @keyframes wiggle{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}
+
+  /* ---- section ---- */
+  .section{padding:56px 5%; max-width:1300px; margin:0 auto;}
+  .section-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:30px; flex-wrap:wrap; gap:10px;}
+  .section-head h2{font-weight:700; font-size:1.9rem; color:var(--plum);}
+  .section-head h2 span{color:var(--pink);}
+  .section-head .meta{color:var(--mauve); font-size:0.85rem; font-weight:500;}
+
+  .cat-strip{display:flex; gap:12px; overflow-x:auto; padding-bottom:8px;}
+  .cat-chip{
+    flex:0 0 auto; background:var(--white); border:2px solid var(--pink-soft); color:var(--mauve);
+    padding:10px 20px; border-radius:999px; font-weight:600; font-size:0.85rem; cursor:pointer; white-space:nowrap; transition:.2s;
+  }
+  .cat-chip.active, .cat-chip:hover{background:var(--pink); border-color:var(--pink); color:#fff;}
+
+  /* ---- product grid ---- */
+  .grid{display:grid; grid-template-columns:repeat(4,1fr); gap:22px; margin-top:30px;}
+  .card{
+    background:var(--white); border-radius:20px; overflow:hidden; position:relative;
+    box-shadow:0 6px 20px rgba(255,47,135,0.08);
+    transition:transform .25s, box-shadow .25s;
+  }
+  .card:hover{transform:translateY(-6px); box-shadow:0 16px 40px rgba(255,47,135,0.25);}
+  .card-media{
+    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
+    font-size:3rem; position:relative;
+    background:linear-gradient(160deg, var(--pink-soft), #fff6fa);
+  }
+  .badge{
+    position:absolute; top:12px; left:12px; background:var(--gold); color:var(--plum);
+    font-weight:700; font-size:0.65rem; padding:5px 11px; border-radius:999px; z-index:2;
+  }
+  .badge.sale{background:var(--pink); color:#fff;}
+  .wish-btn{
+    position:absolute; top:10px; right:10px; z-index:2;
+    background:rgba(255,255,255,0.85); border:none; width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--mauve); font-size:0.95rem; transition:.2s;
+  }
+  .wish-btn:hover{color:var(--pink); transform:scale(1.15);}
+  .card-body{padding:16px 18px 18px;}
+  .card-cat{color:var(--pink-deep); font-size:0.68rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em;}
+  .card-title{font-weight:600; margin:8px 0 6px; font-size:1rem; line-height:1.3;}
+  .stars{color:var(--gold); font-size:0.8rem; margin-bottom:10px;}
+  .stars span{color:var(--mauve); margin-left:4px; font-family:'Poppins';}
+  .price-row{display:flex; align-items:center; justify-content:space-between;}
+  .price{font-family:'Baloo 2'; font-weight:700; font-size:1.2rem; color:var(--plum);}
+  .price .old{color:var(--mauve); font-size:0.8rem; text-decoration:line-through; margin-left:6px; font-weight:400; font-family:'Poppins';}
+  .add-btn{
+    background:linear-gradient(135deg, var(--pink), var(--pink-deep)); border:none; color:#fff;
+    width:38px; height:38px; border-radius:50%; cursor:pointer; font-size:1.1rem; transition:.2s;
+    box-shadow:0 6px 14px rgba(255,47,135,0.35);
+  }
+  .add-btn:hover{transform:scale(1.12);}
+
+  /* ---- promo ---- */
+  .promo{
+    margin:70px 5%; max-width:1300px; margin-inline:auto;
+    border-radius:28px; background:linear-gradient(120deg, var(--pink) 0%, var(--pink-deep) 100%);
+    padding:50px 40px; color:#fff; display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;
+    position:relative; overflow:hidden;
+  }
+  .promo::before{
+    content:'✦'; position:absolute; top:-30px; right:-10px; font-size:14rem; opacity:0.12;
+  }
+  .promo h3{font-size:2.1rem; margin-bottom:10px;}
+  .promo p{opacity:0.9; max-width:420px; line-height:1.6;}
+  .countdown{display:flex; gap:14px;}
+  .countdown div{
+    background:rgba(255,255,255,0.18); border-radius:14px; padding:12px 18px; text-align:center; min-width:64px;
+    backdrop-filter:blur(4px);
+  }
+  .countdown b{display:block; font-family:'Baloo 2'; font-size:1.5rem;}
+  .countdown small{font-size:0.6rem; letter-spacing:0.08em; opacity:0.85;}
+
+  /* ---- footer ---- */
+  footer{border-top:2px solid var(--pink-soft); padding:56px 5% 26px; margin-top:60px;}
+  .foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:36px; max-width:1300px; margin:0 auto;}
+  .foot-grid h4{font-family:'Baloo 2'; font-size:1rem; margin-bottom:14px; color:var(--pink-deep);}
+  .foot-grid p, .foot-grid a{color:var(--mauve); font-size:0.88rem; line-height:2;}
+  .foot-grid a:hover{color:var(--pink);}
+  .foot-bottom{
+    max-width:1300px; margin:36px auto 0; padding-top:20px; border-top:1px solid var(--pink-soft);
+    display:flex; justify-content:space-between; color:var(--mauve); font-size:0.78rem; flex-wrap:wrap; gap:10px;
+  }
+
+  /* ---- cart drawer ---- */
+  .overlay{position:fixed; inset:0; background:rgba(58,13,36,0.4); z-index:90; opacity:0; pointer-events:none; transition:.25s;}
+  .overlay.show{opacity:1; pointer-events:auto;}
+  .drawer{
+    position:fixed; top:0; right:0; height:100%; width:380px; max-width:92vw;
+    background:var(--white); z-index:100; transform:translateX(100%); transition:transform .3s ease;
+    display:flex; flex-direction:column; border-left:3px solid var(--pink-soft);
+  }
+  .drawer.show{transform:translateX(0);}
+  .drawer-head{padding:22px; border-bottom:2px solid var(--pink-soft); display:flex; justify-content:space-between; align-items:center;}
+  .drawer-head h3{font-family:'Baloo 2'; color:var(--pink-deep);}
+  .drawer-items{flex:1; overflow-y:auto; padding:16px 22px;}
+  .drawer-item{display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--pink-soft);}
+  .drawer-item .dimg{width:52px; height:52px; border-radius:14px; background:var(--pink-soft); display:flex; align-items:center; justify-content:center; font-size:1.4rem;}
+  .drawer-item .dinfo{flex:1;}
+  .drawer-item .dt{font-size:0.88rem; font-weight:600;}
+  .drawer-item .dp{color:var(--pink-deep); font-size:0.8rem; margin-top:4px; font-weight:600;}
+  .drawer-item .drm{background:none; border:none; color:var(--mauve); cursor:pointer; font-size:1rem;}
+  .drawer-item .drm:hover{color:var(--pink);}
+  .drawer-foot{padding:20px 22px; border-top:2px solid var(--pink-soft);}
+  .dtot{display:flex; justify-content:space-between; margin-bottom:14px; font-family:'Baloo 2'; font-weight:700; font-size:1.15rem; color:var(--plum);}
+  .empty-cart{color:var(--mauve); text-align:center; margin-top:60px; font-size:0.9rem;}
+
+  @media (max-width:1000px){
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .hero{grid-template-columns:1fr;}
+    nav{display:none;}
+    .foot-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:560px){
+    .grid{grid-template-columns:1fr 1fr; gap:14px;}
+    .hero{padding:50px 5% 30px;}
+    .promo{padding:34px 22px;}
+    .foot-grid{grid-template-columns:1fr;}
+  }
+  @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important;}}
+</style>
+</head>
+<body>
+
+<div class="sparkle-field" id="sparkleField"></div>
+
+<div class="ticker"><span>💖 GLOW BAZAAR IS LIVE — UP TO 60% OFF &nbsp;&nbsp;•&nbsp;&nbsp; FREE SHIPPING OVER ₹999 &nbsp;&nbsp;•&nbsp;&nbsp; NEW DROPS EVERY FRIDAY &nbsp;&nbsp;•&nbsp;&nbsp; GLOW BAZAAR IS LIVE — UP TO 60% OFF &nbsp;&nbsp;•&nbsp;&nbsp; FREE SHIPPING OVER ₹999</span></div>
+
+<header>
+  <div class="logo">
+    <div class="mark">✨</div>
+    <div>BUYZO<span class="sub">GLOW BAZAAR</span></div>
+  </div>
+  <nav>
+    <a href="#shop">Shop</a>
+    <a href="#deals">Deals</a>
+    <a href="#new">New</a>
+    <a href="#about">About</a>
+  </nav>
+  <div class="nav-actions">
+    <button class="icon-btn">🔍</button>
+    <button class="icon-btn" onclick="toggleCart(true)">🛍️<span class="cart-count" id="cartCount">0</span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">✨ New Drop · Glow Bazaar Vol.5</div>
+    <h1 class="hero-title">Shop the <span class="grad">Prettiest Corner</span> of the Bazaar</h1>
+    <p class="desc">Cute tech, glossy gadgets, and pastel-pop essentials — all sparkle, no fuss. Buyzo Shopping brings the bazaar glow straight to your feed.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop Now ✨</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('deals').scrollIntoView({behavior:'smooth'})">See Deals</button>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-badge">60% OFF</div>
+    <div class="blob"></div>
+    <div class="emoji-big">🎀</div>
+  </div>
+</section>
+
+<section class="section" id="shop">
+  <div class="section-head">
+    <h2>Shop by <span>category</span></h2>
+    <div class="meta">6 dreamy sections</div>
+  </div>
+  <div class="cat-strip">
+    <div class="cat-chip active" onclick="filterCat('all', this)">All</div>
+    <div class="cat-chip" onclick="filterCat('audio', this)">Audio</div>
+    <div class="cat-chip" onclick="filterCat('wearable', this)">Wearables</div>
+    <div class="cat-chip" onclick="filterCat('gaming', this)">Gaming</div>
+    <div class="cat-chip" onclick="filterCat('accessories', this)">Accessories</div>
+    <div class="cat-chip" onclick="filterCat('lighting', this)">Lighting</div>
+    <div class="cat-chip" onclick="filterCat('bags', this)">Bags</div>
+  </div>
+  <div class="grid" id="productGrid"></div>
+</section>
+
+<div class="promo" id="deals">
+  <div>
+    <h3>Midnight Glow Sale 💫</h3>
+    <p>Sparkly discounts fade when the clock hits zero. Grab your faves before they're gone!</p>
+    <div class="btn-row" style="margin-top:22px;">
+      <button class="btn btn-primary" style="background:#fff; color:var(--pink-deep);" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop the Sale</button>
+    </div>
+  </div>
+  <div class="countdown" id="countdown">
+    <div><b id="cd-h">08</b><small>HRS</small></div>
+    <div><b id="cd-m">42</b><small>MIN</small></div>
+    <div><b id="cd-s">17</b><small>SEC</small></div>
+  </div>
+</div>
+
+<section class="section" id="new">
+  <div class="section-head">
+    <h2>Fresh <span>arrivals</span></h2>
+    <div class="meta">updated weekly</div>
+  </div>
+  <div class="grid" id="newGrid"></div>
+</section>
+
+<footer id="about">
+  <div class="foot-grid">
+    <div>
+      <div class="logo" style="margin-bottom:14px;"><div class="mark">✨</div><div>BUYZO<span class="sub">GLOW BAZAAR</span></div></div>
+      <p style="max-width:280px;">A pastel-pop online bazaar with all the sparkle — cute finds, glossy deals, and gear that glows.</p>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <a href="#">Audio</a><br><a href="#">Wearables</a><br><a href="#">Gaming</a><br><a href="#">Accessories</a>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <a href="#">Track Order</a><br><a href="#">Returns</a><br><a href="#">Shipping Info</a><br><a href="#">Contact Us</a>
+    </div>
+    <div>
+      <h4>Bazaar</h4>
+      <a href="#">Our Story</a><br><a href="#">Vendors</a><br><a href="#">Careers</a><br><a href="#">Blog</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 BUYZO SHOPPING — GLOW BAZAAR EDITION</span>
+    <span>Made with 💕</span>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay" onclick="toggleCart(false)"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3>Your Cart 🛍️</h3>
+    <button class="icon-btn" onclick="toggleCart(false)">✕</button>
+  </div>
+  <div class="drawer-items" id="drawerItems">
+    <div class="empty-cart">Your cart is empty.<br>Go find something sparkly ✨</div>
+  </div>
+  <div class="drawer-foot">
+    <div class="dtot"><span>Total</span><span id="cartTotal">₹0</span></div>
+    <button class="btn btn-primary" style="width:100%;">Checkout ✨</button>
+  </div>
+</div>
+
+<script>
+const products = [
+  {id:1, name:"Pulsewave Wireless Earbuds", cat:"audio", tag:"audio", emoji:"🎧", price:1799, old:2999, rating:4.6, reviews:214, badge:"HOT"},
+  {id:2, name:"Voltstrap Smartwatch X2", cat:"wearable", tag:"wearables", emoji:"⌚", price:3299, old:null, rating:4.4, reviews:132, badge:null},
+  {id:3, name:"Cindergrip Gaming Mouse", cat:"gaming", tag:"gaming", emoji:"🖱️", price:1199, old:1599, rating:4.7, reviews:341, badge:"SALE"},
+  {id:4, name:"Nightframe RGB Keyboard", cat:"gaming", tag:"gaming", emoji:"⌨️", price:2599, old:null, rating:4.5, reviews:98, badge:"NEW"},
+  {id:5, name:"Driftpack Urban Backpack", cat:"bags", tag:"bags", emoji:"🎒", price:1499, old:2199, rating:4.3, reviews:76, badge:"SALE"},
+  {id:6, name:"Glowline LED Strip Kit", cat:"lighting", tag:"lighting", emoji:"💡", price:899, old:null, rating:4.6, reviews:189, badge:null},
+  {id:7, name:"Neonvolt Portable Speaker", cat:"audio", tag:"audio", emoji:"🔊", price:2199, old:2799, rating:4.5, reviews:154, badge:"SALE"},
+  {id:8, name:"Circuitband Fitness Tracker", cat:"wearable", tag:"wearables", emoji:"📿", price:1699, old:null, rating:4.2, reviews:64, badge:null},
+  {id:9, name:"Vaporshell Phone Case", cat:"accessories", tag:"accessories", emoji:"📱", price:399, old:599, rating:4.1, reviews:410, badge:"SALE"},
+  {id:10, name:"Aftergrid Mechanical Keypad", cat:"gaming", tag:"gaming", emoji:"🎮", price:1899, old:null, rating:4.6, reviews:88, badge:"NEW"},
+  {id:11, name:"Slipstream Sling Bag", cat:"bags", tag:"bags", emoji:"👜", price:1099, old:1399, rating:4.0, reviews:52, badge:"SALE"},
+  {id:12, name:"Auravault Desk Lamp", cat:"lighting", tag:"lighting", emoji:"🪔", price:1299, old:null, rating:4.4, reviews:71, badge:null},
+];
+
+let cart = [];
+
+function starRow(rating, reviews){
+  const full = Math.round(rating);
+  return "★".repeat(full) + "☆".repeat(5-full) + ` <span>${rating} (${reviews})</span>`;
+}
+
+function cardHTML(p){
+  return `
+  <div class="card" data-cat="${p.cat}">
+    <div class="card-media">
+      ${p.badge ? `<div class="badge ${p.badge==='SALE'?'sale':''}">${p.badge}</div>` : ''}
+      <button class="wish-btn">♡</button>
+      <span>${p.emoji}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-cat">${p.tag}</div>
+      <div class="card-title">${p.name}</div>
+      <div class="stars">${starRow(p.rating, p.reviews)}</div>
+      <div class="price-row">
+        <div class="price">₹${p.price}${p.old ? `<span class="old">₹${p.old}</span>` : ''}</div>
+        <button class="add-btn" onclick="addToCart(${p.id})">+</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderGrid(){
+  document.getElementById('productGrid').innerHTML = products.map(cardHTML).join('');
+  document.getElementById('newGrid').innerHTML = products.slice(6,10).map(cardHTML).join('');
+}
+renderGrid();
+
+function filterCat(cat, el){
+  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#productGrid .card').forEach(card=>{
+    card.style.display = (cat==='all' || card.dataset.cat===cat) ? '' : 'none';
+  });
+}
+
+function addToCart(id){
+  const p = products.find(x=>x.id===id);
+  const existing = cart.find(x=>x.id===id);
+  if(existing){ existing.qty++; } else { cart.push({...p, qty:1}); }
+  renderCart();
+  toggleCart(true);
+}
+function removeFromCart(id){ cart = cart.filter(x=>x.id!==id); renderCart(); }
+
+function renderCart(){
+  const items = document.getElementById('drawerItems');
+  const count = cart.reduce((a,c)=>a+c.qty,0);
+  document.getElementById('cartCount').textContent = count;
+  if(cart.length===0){
+    items.innerHTML = `<div class="empty-cart">Your cart is empty.<br>Go find something sparkly ✨</div>`;
+    document.getElementById('cartTotal').textContent = '₹0';
+    return;
+  }
+  items.innerHTML = cart.map(c=>`
+    <div class="drawer-item">
+      <div class="dimg">${c.emoji}</div>
+      <div class="dinfo">
+        <div class="dt">${c.name}</div>
+        <div class="dp">₹${c.price} × ${c.qty}</div>
+      </div>
+      <button class="drm" onclick="removeFromCart(${c.id})">✕</button>
+    </div>`).join('');
+  const total = cart.reduce((a,c)=>a+c.price*c.qty,0);
+  document.getElementById('cartTotal').textContent = '₹' + total;
+}
+
+function toggleCart(open){
+  document.getElementById('drawer').classList.toggle('show', open);
+  document.getElementById('overlay').classList.toggle('show', open);
+}
+
+// countdown
+let totalSec = 8*3600 + 42*60 + 17;
+setInterval(()=>{
+  if(totalSec<=0){ totalSec = 8*3600+42*60+17; }
+  totalSec--;
+  document.getElementById('cd-h').textContent = String(Math.floor(totalSec/3600)).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(Math.floor((totalSec%3600)/60)).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(totalSec%60).padStart(2,'0');
+}, 1000);
+
+// sparkle particles
+const sparkleEmojis = ['✨','💖','🎀','💫'];
+const field = document.getElementById('sparkleField');
+for(let i=0;i<18;i++){
+  const s = document.createElement('div');
+  s.className = 'sparkle';
+  s.textContent = sparkleEmojis[Math.floor(Math.random()*sparkleEmojis.length)];
+  s.style.left = Math.random()*100 + '%';
+  s.style.animationDuration = (8 + Math.random()*10) + 's';
+  s.style.animationDelay = (Math.random()*10) + 's';
+  s.style.fontSize = (0.9 + Math.random()*1.2) + 'rem';
+  field.appendChild(s);
+}
+</script>
+
+</body>
+</html>
